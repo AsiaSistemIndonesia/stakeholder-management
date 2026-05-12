@@ -78,6 +78,29 @@ export interface Fungsi {
   }[];
 }
 
+export interface CSR {
+  id: string;
+  nama: string;
+  lokasi: {
+    kabupaten: string;
+    kecamatan: string;
+    provinsi: string;
+    pulau: string;
+  };
+  koordinat: { lat: number; lng: number };
+  status: "active" | "inactive";
+  kategori:
+    | "infrastruktur"
+    | "pendidikan"
+    | "lingkungan"
+    | "ekonomi"
+    | "sosial";
+  stakeholderIds: string[];
+  budget: number;
+  deskripsi?: string;
+  createdAt: string;
+}
+
 export interface User {
   id: string;
   nama: string;
@@ -739,6 +762,140 @@ export const auditLogData: AuditLog[] = [
 ];
 
 // Dashboard Statistics
+
+// CSR Data
+export const csrData: CSR[] = [
+  {
+    id: "csr-1",
+    nama: "Universitas Pertamina",
+    lokasi: {
+      kabupaten: "Jakarta Selatan",
+      kecamatan: "Simprug",
+      provinsi: "DKI Jakarta",
+      pulau: "Jawa",
+    },
+    koordinat: { lat: -6.2615, lng: 106.7816 },
+    status: "active",
+    kategori: "pendidikan",
+    stakeholderIds: ["sh-1", "sh-6"],
+    budget: 150000000000,
+    deskripsi:
+      "Program beasiswa dan pengembangan pendidikan tinggi di bidang energi dan migas.",
+    createdAt: "2020-01-15",
+  },
+  {
+    id: "csr-2",
+    nama: "Penghijauan Hutan Kalimantan Barat",
+    lokasi: {
+      kabupaten: "Ketapang",
+      kecamatan: "Kendawangan",
+      provinsi: "Kalimantan Barat",
+      pulau: "Kalimantan",
+    },
+    koordinat: { lat: -1.8, lng: 110.5 },
+    status: "active",
+    kategori: "lingkungan",
+    stakeholderIds: ["sh-4", "sh-11"],
+    budget: 25000000000,
+    deskripsi:
+      "Program reboisasi dan konservasi hutan di sekitar area operasi.",
+    createdAt: "2022-06-01",
+  },
+  {
+    id: "csr-3",
+    nama: "Pembangunan Jembatan Desa Balai Raja",
+    lokasi: {
+      kabupaten: "Bengkalis",
+      kecamatan: "Mandau",
+      provinsi: "Riau",
+      pulau: "Sumatera",
+    },
+    koordinat: { lat: 1.28, lng: 101.35 },
+    status: "active",
+    kategori: "infrastruktur",
+    stakeholderIds: ["sh-3", "sh-10"],
+    budget: 8500000000,
+    deskripsi:
+      "Pembangunan jembatan penghubung antar desa untuk meningkatkan aksesibilitas warga.",
+    createdAt: "2023-03-20",
+  },
+  {
+    id: "csr-4",
+    nama: "Pelatihan UMKM Masyarakat Pesisir",
+    lokasi: {
+      kabupaten: "Balikpapan",
+      kecamatan: "Balikpapan Selatan",
+      provinsi: "Kalimantan Timur",
+      pulau: "Kalimantan",
+    },
+    koordinat: { lat: -1.25, lng: 116.85 },
+    status: "active",
+    kategori: "ekonomi",
+    stakeholderIds: ["sh-5", "sh-12"],
+    budget: 3500000000,
+    deskripsi:
+      "Program pemberdayaan ekonomi masyarakat pesisir melalui pelatihan kewirausahaan.",
+    createdAt: "2023-08-10",
+  },
+  {
+    id: "csr-5",
+    nama: "Posyandu dan Puskesmas Keliling",
+    lokasi: {
+      kabupaten: "Sorong",
+      kecamatan: "Sorong Utara",
+      provinsi: "Papua Barat",
+      pulau: "Papua",
+    },
+    koordinat: { lat: -0.88, lng: 131.25 },
+    status: "active",
+    kategori: "sosial",
+    stakeholderIds: ["sh-8"],
+    budget: 5000000000,
+    deskripsi:
+      "Program kesehatan masyarakat dengan penyediaan fasilitas posyandu dan puskesmas keliling.",
+    createdAt: "2024-01-05",
+  },
+  {
+    id: "csr-6",
+    nama: "Beasiswa Anak Daerah Operasi",
+    lokasi: {
+      kabupaten: "Dumai",
+      kecamatan: "Dumai Timur",
+      provinsi: "Riau",
+      pulau: "Sumatera",
+    },
+    koordinat: { lat: 1.68, lng: 101.45 },
+    status: "inactive",
+    kategori: "pendidikan",
+    stakeholderIds: ["sh-3"],
+    budget: 2000000000,
+    deskripsi:
+      "Program beasiswa untuk anak-anak di sekitar area operasi drilling.",
+    createdAt: "2021-05-15",
+  },
+];
+
+export const csrKategoriColors: Record<CSR["kategori"], string> = {
+  infrastruktur: "#3B82F6",
+  pendidikan: "#8B5CF6",
+  lingkungan: "#10B981",
+  ekonomi: "#F59E0B",
+  sosial: "#EC4899",
+};
+
+export function getCSRById(id: string): CSR | undefined {
+  return csrData.find((c) => c.id === id);
+}
+
+export function getCSRByZona(zonaId: string): CSR[] {
+  const zona = zonaOperasiData.find((z) => z.id === zonaId);
+  if (!zona) return [];
+  return csrData.filter((c) => {
+    const detectedZona = getZonaFromCoordinat(c.koordinat.lat, c.koordinat.lng);
+    return detectedZona === zonaId;
+  });
+}
+
 export const dashboardStats = {
   totalStakeholder: stakeholderData.length,
   totalOrganisasi: organisasiData.length,

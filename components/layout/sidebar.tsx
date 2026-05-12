@@ -14,6 +14,7 @@ import {
   LogOut,
   ChevronLeft,
   Menu,
+  Heart,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { useSidebar } from "@/components/layout/sidebar-context";
@@ -46,6 +47,11 @@ const menuItems = [
     label: "Laporan",
     href: "/laporan",
     icon: AlertTriangle,
+  },
+  {
+    label: "CSR",
+    href: "/csr",
+    icon: Heart,
   },
   {
     label: "Struktur Fungsi",

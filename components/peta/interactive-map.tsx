@@ -21,11 +21,22 @@ import {
   Stakeholder,
   Insiden,
   ZonaOperasi,
+  csrKategoriColors,
+  csrData,
+  getZonaFromCoordinat,
+  getStakeholderById,
 } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, AlertTriangle, MapPin, Building2 } from "lucide-react";
+import {
+  Users,
+  AlertTriangle,
+  MapPin,
+  Building2,
+  Heart,
+  Banknote,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 
 // Fix for default marker icons in Next.js
@@ -71,14 +82,40 @@ const createInsidenIcon = (color: string) => {
   });
 };
 
+const createCSRIcon = (color: string) => {
+  return L.divIcon({
+    className: "custom-marker-csr",
+    html: `<div style="
+      background-color: ${color};
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    ">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="white"/>
+      </svg>
+    </div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -28],
+  });
+};
+
 interface MapControlsProps {
   activeZona: string | null;
   zones: ZonaOperasi[];
   onZonaChange: (zonaId: string | null) => void;
   showStakeholders: boolean;
   showIncidents: boolean;
+  showCSR: boolean;
   onToggleStakeholders: () => void;
   onToggleIncidents: () => void;
+  onToggleCSR: () => void;
 }
 
 function MapControls({
@@ -87,8 +124,10 @@ function MapControls({
   onZonaChange,
   showStakeholders,
   showIncidents,
+  showCSR,
   onToggleStakeholders,
   onToggleIncidents,
+  onToggleCSR,
 }: MapControlsProps) {
   return (
     <Card className="absolute bottom-4 left-4 z-[1000] bg-card/95 backdrop-blur border-border w-64">
@@ -147,6 +186,15 @@ function MapControls({
               <AlertTriangle className="h-3 w-3 mr-2" />
               Insiden
             </Button>
+            <Button
+              variant={showCSR ? "default" : "outline"}
+              size="sm"
+              className="w-full justify-start text-xs"
+              onClick={onToggleCSR}
+            >
+              <Heart className="h-3 w-3 mr-2" />
+              CSR
+            </Button>
           </div>
         </div>
       </CardContent>
@@ -157,9 +205,14 @@ function MapControls({
 interface MapLegendProps {
   showStakeholders: boolean;
   showIncidents: boolean;
+  showCSR: boolean;
 }
 
-function MapLegend({ showStakeholders, showIncidents }: MapLegendProps) {
+function MapLegend({
+  showStakeholders,
+  showIncidents,
+  showCSR,
+}: MapLegendProps) {
   return (
     <Card className="absolute top-4 right-4 z-[1000] bg-card/95 backdrop-blur border-border">
       <CardContent className="p-4 space-y-3">
@@ -200,6 +253,23 @@ function MapLegend({ showStakeholders, showIncidents }: MapLegendProps) {
             ))}
           </div>
         )}
+
+        {showCSR && (
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground">Kategori CSR</p>
+            {Object.entries(csrKategoriColors).map(([key, color]) => (
+              <div key={key} className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: color }}
+                />
+                <span className="text-xs text-foreground capitalize">
+                  {key}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -224,6 +294,7 @@ export function InteractiveMap() {
   const [activeZona, setActiveZona] = useState<string | null>(null);
   const [showStakeholders, setShowStakeholders] = useState(true);
   const [showIncidents, setShowIncidents] = useState(true);
+  const [showCSR, setShowCSR] = useState(true);
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
@@ -246,6 +317,16 @@ export function InteractiveMap() {
   const filteredIncidents = activeZona
     ? insidenData.filter((ins) => ins.zonaOperasi === activeZona)
     : insidenData;
+
+  const filteredCSR = activeZona
+    ? csrData.filter((csr) => {
+        const detectedZona = getZonaFromCoordinat(
+          csr.koordinat.lat,
+          csr.koordinat.lng,
+        );
+        return detectedZona === activeZona;
+      })
+    : csrData;
 
   const activeZonaData = activeZona
     ? zonaOperasiData.find((z) => z.id === activeZona) || null
@@ -394,21 +475,103 @@ export function InteractiveMap() {
               </Popup>
             </Marker>
           ))}
+
+        {/* CSR Markers */}
+        {showCSR &&
+          filteredCSR.map((csr) => {
+            const stakeholders = csr.stakeholderIds
+              .map((id) => getStakeholderById(id))
+              .filter(Boolean);
+            const formatBudget = (amount: number) => {
+              if (amount >= 1000000000000)
+                return `Rp ${(amount / 1000000000000).toFixed(1)} T`;
+              if (amount >= 1000000000)
+                return `Rp ${(amount / 1000000000).toFixed(1)} M`;
+              return `Rp ${(amount / 1000000).toFixed(0)} Jt`;
+            };
+            return (
+              <Marker
+                key={csr.id}
+                position={[csr.koordinat.lat, csr.koordinat.lng]}
+                icon={createCSRIcon(csrKategoriColors[csr.kategori])}
+              >
+                <Popup>
+                  <div className="min-w-[240px]">
+                    <div className="flex items-start gap-2 mb-2">
+                      <Heart
+                        className="h-5 w-5 shrink-0"
+                        style={{ color: csrKategoriColors[csr.kategori] }}
+                      />
+                      <div>
+                        <p className="font-semibold text-foreground">
+                          {csr.nama}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {csr.lokasi.kabupaten}, {csr.lokasi.provinsi}
+                        </p>
+                      </div>
+                    </div>
+                    {csr.deskripsi && (
+                      <p className="text-xs text-muted-foreground mb-2">
+                        {csr.deskripsi}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge
+                        className="text-xs"
+                        style={{
+                          backgroundColor: csrKategoriColors[csr.kategori],
+                          color: "white",
+                        }}
+                      >
+                        {csr.kategori}
+                      </Badge>
+                      <Badge
+                        variant={
+                          csr.status === "active" ? "default" : "secondary"
+                        }
+                        className={
+                          csr.status === "active"
+                            ? "text-xs bg-success/15 text-success border-success/30"
+                            : "text-xs"
+                        }
+                      >
+                        {csr.status === "active" ? "Aktif" : "Nonaktif"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs font-medium text-success mb-2">
+                      <Banknote className="h-3.5 w-3.5" />
+                      {formatBudget(csr.budget)}
+                    </div>
+                    {stakeholders.length > 0 && (
+                      <div className="text-xs text-muted-foreground">
+                        <Users className="h-3 w-3 inline mr-1" />
+                        {stakeholders.length} stakeholder terkait
+                      </div>
+                    )}
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })}
       </MapContainer>
 
       <MapControls
-        activeZona={activeZona}
-        zones={zonaOperasiData}
         onZonaChange={setActiveZona}
         showStakeholders={showStakeholders}
         showIncidents={showIncidents}
+        showCSR={showCSR}
         onToggleStakeholders={() => setShowStakeholders(!showStakeholders)}
         onToggleIncidents={() => setShowIncidents(!showIncidents)}
+        onToggleCSR={() => setShowCSR(!showCSR)}
+        activeZona={null}
+        zones={[]}
       />
 
       <MapLegend
         showStakeholders={showStakeholders}
         showIncidents={showIncidents}
+        showCSR={showCSR}
       />
     </div>
   );
