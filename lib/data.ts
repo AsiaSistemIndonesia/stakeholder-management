@@ -41,6 +41,14 @@ export interface ZonaOperasi {
   warna: string;
 }
 
+export interface TimelineItem {
+  id: string;
+  pesan: string;
+  tanggal: string;
+  updaterId: string;
+  updaterNama: string;
+}
+
 export interface Insiden {
   id: string;
   judul: string;
@@ -54,6 +62,7 @@ export interface Insiden {
   pelapor: string;
   tanggal: string;
   stakeholderTerkait?: string[];
+  timeline?: TimelineItem[];
 }
 
 export interface Fungsi {
@@ -122,25 +131,33 @@ export const zonaOperasiData: ZonaOperasi[] = [
     id: "zona-3",
     nama: "Zona Kalimantan",
     deskripsi: "Operasi pengeboran di wilayah Kalimantan",
-    koordinat: { lat: 0.5, lng: 116.5 },
+    koordinat: { lat: 0.0, lng: 114.0 }, // Center disesuaikan ke tengah daratan
     batasWilayah: [
-      { lat: 4.5, lng: 108 },
-      { lat: 4.5, lng: 119 },
-      { lat: -4.5, lng: 119 },
-      { lat: -4.5, lng: 108 },
+      { lat: 1.0, lng: 108.0 }, // Barat Daya (Kalbar)
+      { lat: 2.0, lng: 109.5 }, // Mulai mengikuti batas Malaysia
+      { lat: 4.2, lng: 114.5 }, // Puncak perbatasan utara
+      { lat: 4.1, lng: 117.9 }, // Ujung utara Kaltara (Seatik)
+      { lat: 3.5, lng: 119.5 }, // Mulai mengikuti garis hijau (Selat Makassar)
+      { lat: -1.0, lng: 118.8 }, // Tengah garis hijau
+      { lat: -5.5, lng: 117.5 }, // Ujung selatan garis hijau
+      { lat: -5.5, lng: 108.0 }, // Kembali ke barat
     ],
     warna: "#F59E0B",
   },
+
   {
     id: "zona-4",
     nama: "Zona Sulawesi",
     deskripsi: "Operasi pengeboran di wilayah Sulawesi",
-    koordinat: { lat: -1.5, lng: 120.5 },
+    koordinat: { lat: -1.5, lng: 121.5 }, // Center disesuaikan
     batasWilayah: [
-      { lat: 2, lng: 118 },
-      { lat: 2, lng: 125 },
-      { lat: -6, lng: 125 },
-      { lat: -6, lng: 118 },
+      { lat: 5.5, lng: 121.0 }, // Utara (di atas Gorontalo/Manado)
+      { lat: 5.5, lng: 127.0 }, // Timur Laut
+      { lat: -7.0, lng: 127.0 }, // Tenggara
+      { lat: -7.0, lng: 117.5 }, // Selatan
+      { lat: -5.5, lng: 117.5 }, // Titik temu bawah garis hijau
+      { lat: -1.0, lng: 118.8 }, // Titik temu tengah garis hijau
+      { lat: 3.5, lng: 119.5 }, // Titik temu atas garis hijau
     ],
     warna: "#EF4444",
   },
@@ -158,6 +175,22 @@ export const zonaOperasiData: ZonaOperasi[] = [
     warna: "#8B5CF6",
   },
 ];
+
+// Returns the zona id whose bounding box contains the given coordinate, or null
+export function getZonaFromCoordinat(lat: number, lng: number): string | null {
+  for (const zona of zonaOperasiData) {
+    const lats = zona.batasWilayah.map((p) => p.lat);
+    const lngs = zona.batasWilayah.map((p) => p.lng);
+    const minLat = Math.min(...lats);
+    const maxLat = Math.max(...lats);
+    const minLng = Math.min(...lngs);
+    const maxLng = Math.max(...lngs);
+    if (lat >= minLat && lat <= maxLat && lng >= minLng && lng <= maxLng) {
+      return zona.id;
+    }
+  }
+  return null;
+}
 
 // Organisasi Data
 export const organisasiData: Organisasi[] = [
@@ -203,7 +236,8 @@ export const organisasiData: Organisasi[] = [
     nama: "SKK Migas",
     tipe: "pemerintah",
     alamat: "Jakarta Pusat",
-    deskripsi: "Satuan Kerja Khusus Pelaksana Kegiatan Usaha Hulu Minyak dan Gas Bumi",
+    deskripsi:
+      "Satuan Kerja Khusus Pelaksana Kegiatan Usaha Hulu Minyak dan Gas Bumi",
     zonaOperasi: "zona-2",
     koordinat: { lat: -6.1944, lng: 106.8229 },
   },
@@ -480,7 +514,8 @@ export const insidenData: Insiden[] = [
   {
     id: "ins-1",
     judul: "Demo Warga di Lokasi Rig A-15",
-    deskripsi: "Warga melakukan demo damai menuntut kompensasi lahan yang lebih adil. Sekitar 50 orang hadir di depan pintu masuk lokasi.",
+    deskripsi:
+      "Warga melakukan demo damai menuntut kompensasi lahan yang lebih adil. Sekitar 50 orang hadir di depan pintu masuk lokasi.",
     urgensi: "tinggi",
     status: "proses",
     lokasi: "Rig A-15, Duri",
@@ -490,11 +525,44 @@ export const insidenData: Insiden[] = [
     pelapor: "sh-10",
     tanggal: "2024-03-28",
     stakeholderTerkait: ["sh-3", "sh-10"],
+    timeline: [
+      {
+        id: "tl-1",
+        pesan: "Laporan insiden diterima dari petugas lapangan.",
+        tanggal: "2024-03-28 08:30",
+        updaterId: "sh-10",
+        updaterNama: "Budi Santoso",
+      },
+      {
+        id: "tl-2",
+        pesan:
+          "Tim Community Relations dikerahkan ke lokasi untuk melakukan mediasi awal.",
+        tanggal: "2024-03-28 10:15",
+        updaterId: "sh-11",
+        updaterNama: "Dewi Kartini",
+      },
+      {
+        id: "tl-3",
+        pesan: "Meeting dengan tokoh masyarakat dijadwalkan untuk besok pagi.",
+        tanggal: "2024-03-28 14:00",
+        updaterId: "sh-6",
+        updaterNama: "Rini Wulandari",
+      },
+      {
+        id: "tl-4",
+        pesan: "Proposal kompensasi tambahan sedang disiapkan oleh tim Legal.",
+        tanggal: "2024-03-29 09:00",
+        updaterId: "sh-6",
+        updaterNama: "Rini Wulandari",
+      },
+    ],
   },
+
   {
     id: "ins-2",
     judul: "Keterlambatan Izin Operasi",
-    deskripsi: "Proses perpanjangan izin operasi di Kaltim mengalami keterlambatan 2 minggu dari jadwal. Perlu eskalasi ke level lebih tinggi.",
+    deskripsi:
+      "Proses perpanjangan izin operasi di Kaltim mengalami keterlambatan 2 minggu dari jadwal. Perlu eskalasi ke level lebih tinggi.",
     urgensi: "sedang",
     status: "proses",
     lokasi: "Kantor Dinas ESDM Kaltim",
@@ -503,11 +571,28 @@ export const insidenData: Insiden[] = [
     pelapor: "sh-9",
     tanggal: "2024-03-25",
     stakeholderTerkait: ["sh-9"],
+    timeline: [
+      {
+        id: "tl-5",
+        pesan: "Kendala administrasi teridentifikasi pada dokumen AMDAL.",
+        tanggal: "2024-03-25 11:00",
+        updaterId: "sh-9",
+        updaterNama: "Agus Prabowo",
+      },
+      {
+        id: "tl-6",
+        pesan: "Eskalasi ke VP Operations untuk koordinasi dengan Dinas ESDM.",
+        tanggal: "2024-03-26 14:30",
+        updaterId: "sh-9",
+        updaterNama: "Agus Prabowo",
+      },
+    ],
   },
   {
     id: "ins-3",
     judul: "Kerusakan Jalan Akses Rig B-22",
-    deskripsi: "Jalan akses menuju Rig B-22 rusak berat akibat hujan lebat. Perlu koordinasi dengan pemda untuk perbaikan bersama.",
+    deskripsi:
+      "Jalan akses menuju Rig B-22 rusak berat akibat hujan lebat. Perlu koordinasi dengan pemda untuk perbaikan bersama.",
     urgensi: "sedang",
     status: "baru",
     lokasi: "Jalan Akses Rig B-22, Riau",
@@ -517,11 +602,21 @@ export const insidenData: Insiden[] = [
     pelapor: "sh-10",
     tanggal: "2024-03-29",
     stakeholderTerkait: ["sh-1", "sh-10"],
+    timeline: [
+      {
+        id: "tl-7",
+        pesan: "Laporan diterima dari Community Relations Officer.",
+        tanggal: "2024-03-30 07:45",
+        updaterId: "sh-11",
+        updaterNama: "Dewi Kartini",
+      },
+    ],
   },
   {
     id: "ins-4",
     judul: "Penandatanganan MoU dengan Medco",
-    deskripsi: "MoU kerjasama drilling services berhasil ditandatangani. Nilai kontrak USD 15 juta untuk 2 tahun.",
+    deskripsi:
+      "MoU kerjasama drilling services berhasil ditandatangani. Nilai kontrak USD 15 juta untuk 2 tahun.",
     urgensi: "rendah",
     status: "selesai",
     lokasi: "Kantor Pusat Medco, Jakarta",
@@ -534,7 +629,8 @@ export const insidenData: Insiden[] = [
   {
     id: "ins-5",
     judul: "Keluhan Kebisingan dari Warga",
-    deskripsi: "Warga sekitar melaporkan kebisingan berlebih dari aktivitas drilling malam hari. Perlu meeting dengan tokoh masyarakat.",
+    deskripsi:
+      "Warga sekitar melaporkan kebisingan berlebih dari aktivitas drilling malam hari. Perlu meeting dengan tokoh masyarakat.",
     urgensi: "tinggi",
     status: "baru",
     lokasi: "Desa Balai Raja, Riau",
@@ -555,7 +651,12 @@ export const fungsiData: Fungsi[] = [
     warna: "#3B82F6",
     anggota: [
       { stakeholderId: "sh-6", peran: "VP Corporate Secretary", level: 1 },
-      { stakeholderId: "sh-11", peran: "Community Relations Officer", level: 2, atasanId: "sh-6" },
+      {
+        stakeholderId: "sh-11",
+        peran: "Community Relations Officer",
+        level: 2,
+        atasanId: "sh-6",
+      },
     ],
   },
   {
@@ -565,7 +666,12 @@ export const fungsiData: Fungsi[] = [
     warna: "#10B981",
     anggota: [
       { stakeholderId: "sh-7", peran: "VP Human Capital", level: 1 },
-      { stakeholderId: "sh-12", peran: "HR Manager", level: 2, atasanId: "sh-7" },
+      {
+        stakeholderId: "sh-12",
+        peran: "HR Manager",
+        level: 2,
+        atasanId: "sh-7",
+      },
     ],
   },
   {
@@ -575,7 +681,12 @@ export const fungsiData: Fungsi[] = [
     warna: "#F59E0B",
     anggota: [
       { stakeholderId: "sh-8", peran: "VP Operations", level: 1 },
-      { stakeholderId: "sh-10", peran: "Field Manager", level: 2, atasanId: "sh-8" },
+      {
+        stakeholderId: "sh-10",
+        peran: "Field Manager",
+        level: 2,
+        atasanId: "sh-8",
+      },
     ],
   },
 ];
@@ -635,25 +746,31 @@ export const dashboardStats = {
   insidenAktif: insidenData.filter((i) => i.status !== "selesai").length,
   stakeholderByKategori: {
     customer: stakeholderData.filter((s) => s.kategori === "customer").length,
-    pemerintah: stakeholderData.filter((s) => s.kategori === "pemerintah").length,
+    pemerintah: stakeholderData.filter((s) => s.kategori === "pemerintah")
+      .length,
     komunitas: stakeholderData.filter((s) => s.kategori === "komunitas").length,
     mitra: stakeholderData.filter((s) => s.kategori === "mitra").length,
     internal: stakeholderData.filter((s) => s.kategori === "internal").length,
   },
   stakeholderByZona: {
-    "Zona Sumatera": stakeholderData.filter((s) => s.zonaOperasi === "zona-1").length,
-    "Zona Jawa": stakeholderData.filter((s) => s.zonaOperasi === "zona-2").length,
-    "Zona Kalimantan": stakeholderData.filter((s) => s.zonaOperasi === "zona-3").length,
-    "Zona Sulawesi": stakeholderData.filter((s) => s.zonaOperasi === "zona-4").length,
-    "Zona Papua": stakeholderData.filter((s) => s.zonaOperasi === "zona-5").length,
+    "Zona Sumatera": stakeholderData.filter((s) => s.zonaOperasi === "zona-1")
+      .length,
+    "Zona Jawa": stakeholderData.filter((s) => s.zonaOperasi === "zona-2")
+      .length,
+    "Zona Kalimantan": stakeholderData.filter((s) => s.zonaOperasi === "zona-3")
+      .length,
+    "Zona Sulawesi": stakeholderData.filter((s) => s.zonaOperasi === "zona-4")
+      .length,
+    "Zona Papua": stakeholderData.filter((s) => s.zonaOperasi === "zona-5")
+      .length,
   },
   trenBulanan: [
-    { bulan: "Jan", stakeholder: 4, insiden: 1 },
-    { bulan: "Feb", stakeholder: 7, insiden: 2 },
-    { bulan: "Mar", stakeholder: 12, insiden: 5 },
-    { bulan: "Apr", stakeholder: 15, insiden: 3 },
-    { bulan: "Mei", stakeholder: 18, insiden: 4 },
-    { bulan: "Jun", stakeholder: 22, insiden: 2 },
+    { bulan: "Jan", insiden: 1 },
+    { bulan: "Feb", insiden: 2 },
+    { bulan: "Mar", insiden: 5 },
+    { bulan: "Apr", insiden: 3 },
+    { bulan: "Mei", insiden: 4 },
+    { bulan: "Jun", insiden: 2 },
   ],
 };
 

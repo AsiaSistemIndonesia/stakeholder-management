@@ -43,8 +43,8 @@ const menuItems = [
     icon: Map,
   },
   {
-    label: "Laporan Insiden",
-    href: "/insiden",
+    label: "Laporan",
+    href: "/laporan",
     icon: AlertTriangle,
   },
   {
@@ -180,7 +180,7 @@ export function Sidebar() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 shrink-0"
+                  className="h-8 w-8 shrink-0 text-white"
                   onClick={logout}
                   aria-label="Keluar"
                 >

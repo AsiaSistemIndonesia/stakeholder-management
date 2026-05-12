@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { IncidentCard } from "@/components/insiden/incident-card";
-import { IncidentDetailModal } from "@/components/insiden/incident-detail-modal";
-import { IncidentStats } from "@/components/insiden/incident-stats";
+import { IncidentCard } from "@/components/laporan/laporan-card";
+import { LaporanDetailModal } from "@/components/laporan/laporan-detail-modal";
+import { CreateLaporanModal } from "@/components/laporan/create-laporan-modal";
+import { IncidentStats } from "@/components/laporan/laporan-stats";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ import { Search, Plus, Filter } from "lucide-react";
 export default function InsidenPage() {
   const [selectedInsiden, setSelectedInsiden] = useState<Insiden | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [urgensiFilter, setUrgensiFilter] = useState("all");
@@ -79,7 +81,10 @@ export default function InsidenPage() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button
+                className="bg-primary hover:bg-primary/90"
+                onClick={() => setCreateOpen(true)}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Buat Laporan
               </Button>
@@ -169,11 +174,13 @@ export default function InsidenPage() {
         </CardContent>
       </Card>
 
-      <IncidentDetailModal
+      <LaporanDetailModal
         insiden={selectedInsiden}
         open={detailOpen}
         onOpenChange={setDetailOpen}
       />
+
+      <CreateLaporanModal open={createOpen} onOpenChange={setCreateOpen} />
     </DashboardLayout>
   );
 }

@@ -6,6 +6,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -30,9 +36,10 @@ import {
   FileText,
   Image,
   ExternalLink,
+  History,
 } from "lucide-react";
 
-interface IncidentDetailModalProps {
+interface LaporanDetailModalProps {
   insiden: Insiden | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -44,18 +51,18 @@ const statusIcons = {
   selesai: CheckCircle2,
 };
 
-export function IncidentDetailModal({
+export function LaporanDetailModal({
   insiden,
   open,
   onOpenChange,
-}: IncidentDetailModalProps) {
+}: LaporanDetailModalProps) {
   if (!insiden) return null;
 
   const pelapor = getStakeholderById(insiden.pelapor);
   const zona = getZonaById(insiden.zonaOperasi);
   const StatusIcon = statusIcons[insiden.status];
   const relatedStakeholders = insiden.stakeholderTerkait?.map((id) =>
-    getStakeholderById(id)
+    getStakeholderById(id),
   );
 
   return (
@@ -189,6 +196,65 @@ export function IncidentDetailModal({
           )}
         </div>
 
+        {/* Timeline Insiden */}
+        {insiden.timeline && insiden.timeline.length > 0 && (
+          <>
+            <Separator className="bg-border" />
+            <div className="py-4">
+              <Accordion type="single" collapsible defaultValue="timeline">
+                <AccordionItem value="timeline" className="border-none">
+                  <AccordionTrigger className="py-0 hover:no-underline">
+                    <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                      <History className="h-4 w-4 text-primary" />
+                      Timeline Laporan ({insiden.timeline.length})
+                    </h3>
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-4 pb-0">
+                    <div className="relative pl-6">
+                      {/* Timeline line */}
+                      <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-border" />
+
+                      <div className="space-y-4">
+                        {insiden.timeline
+                          .slice()
+                          .reverse()
+                          .map((item, index) => (
+                            <div key={item.id} className="relative">
+                              {/* Timeline dot */}
+                              <div
+                                className={`absolute -left-6 top-1.5 w-3 h-3 rounded-full border-2 ${
+                                  index === 0
+                                    ? "bg-primary border-primary"
+                                    : "bg-card border-muted-foreground"
+                                }`}
+                              />
+
+                              <div className="bg-secondary/30 rounded-lg p-3">
+                                <p className="text-sm text-foreground">
+                                  {item.pesan}
+                                </p>
+                                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                                  <span className="flex items-center gap-1">
+                                    <Calendar className="h-3 w-3" />
+                                    {item.tanggal}
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <User className="h-3 w-3" />
+                                    {item.updaterNama}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </>
+        )}
+
         {/* Related Stakeholders */}
         {relatedStakeholders && relatedStakeholders.length > 0 && (
           <>
@@ -225,7 +291,7 @@ export function IncidentDetailModal({
                           {sh.nama}
                         </span>
                       </div>
-                    )
+                    ),
                 )}
               </div>
             </div>

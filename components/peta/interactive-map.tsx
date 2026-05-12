@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polygon,
+  useMap,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import {
@@ -19,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, AlertTriangle, MapPin, Building2 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 // Fix for default marker icons in Next.js
 const createIcon = (color: string) => {
@@ -83,10 +91,12 @@ function MapControls({
   onToggleIncidents,
 }: MapControlsProps) {
   return (
-    <Card className="absolute top-4 left-4 z-[1000] bg-card/95 backdrop-blur border-border w-64">
+    <Card className="absolute bottom-4 left-4 z-[1000] bg-card/95 backdrop-blur border-border w-64">
       <CardContent className="p-4 space-y-4">
         <div>
-          <h3 className="text-sm font-semibold text-foreground mb-2">Zona Operasi</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-2">
+            Zona Operasi
+          </h3>
           <div className="space-y-1">
             <Button
               variant={activeZona === null ? "default" : "ghost"}
@@ -115,7 +125,9 @@ function MapControls({
         </div>
 
         <div className="border-t border-border pt-4">
-          <h3 className="text-sm font-semibold text-foreground mb-2">Tampilkan</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-2">
+            Tampilkan
+          </h3>
           <div className="space-y-2">
             <Button
               variant={showStakeholders ? "default" : "outline"}
@@ -149,20 +161,24 @@ interface MapLegendProps {
 
 function MapLegend({ showStakeholders, showIncidents }: MapLegendProps) {
   return (
-    <Card className="absolute bottom-4 right-4 z-[1000] bg-card/95 backdrop-blur border-border">
+    <Card className="absolute top-4 right-4 z-[1000] bg-card/95 backdrop-blur border-border">
       <CardContent className="p-4 space-y-3">
         <h3 className="text-sm font-semibold text-foreground">Legenda</h3>
-        
+
         {showStakeholders && (
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Kategori Stakeholder</p>
+            <p className="text-xs text-muted-foreground">
+              Kategori Stakeholder
+            </p>
             {Object.entries(kategoriColors).map(([key, color]) => (
               <div key={key} className="flex items-center gap-2">
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: color }}
                 />
-                <span className="text-xs text-foreground capitalize">{key}</span>
+                <span className="text-xs text-foreground capitalize">
+                  {key}
+                </span>
               </div>
             ))}
           </div>
@@ -177,7 +193,9 @@ function MapLegend({ showStakeholders, showIncidents }: MapLegendProps) {
                   className="w-3 h-3 rounded"
                   style={{ backgroundColor: color }}
                 />
-                <span className="text-xs text-foreground capitalize">{key}</span>
+                <span className="text-xs text-foreground capitalize">
+                  {key}
+                </span>
               </div>
             ))}
           </div>
@@ -206,6 +224,8 @@ export function InteractiveMap() {
   const [activeZona, setActiveZona] = useState<string | null>(null);
   const [showStakeholders, setShowStakeholders] = useState(true);
   const [showIncidents, setShowIncidents] = useState(true);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   useEffect(() => {
     setMounted(true);
@@ -237,10 +257,10 @@ export function InteractiveMap() {
         center={[-2.5, 118]}
         zoom={5}
         className="h-full w-full"
-        style={{ background: "#1f2937" }}
+        style={{ background: isDark ? "#1f2937" : "#e8e8e8" }}
       >
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url={`https://{s}.basemaps.cartocdn.com/${isDark ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png`}
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
@@ -261,7 +281,9 @@ export function InteractiveMap() {
             <Popup>
               <div className="text-foreground">
                 <h3 className="font-semibold">{zona.nama}</h3>
-                <p className="text-sm text-muted-foreground">{zona.deskripsi}</p>
+                <p className="text-sm text-muted-foreground">
+                  {zona.deskripsi}
+                </p>
               </div>
             </Popup>
           </Polygon>
@@ -284,11 +306,19 @@ export function InteractiveMap() {
                         className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium"
                         style={{ backgroundColor: kategoriColors[sh.kategori] }}
                       >
-                        {sh.nama.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                        {sh.nama
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .slice(0, 2)}
                       </div>
                       <div>
-                        <p className="font-semibold text-foreground">{sh.nama}</p>
-                        <p className="text-xs text-muted-foreground">{sh.jabatan}</p>
+                        <p className="font-semibold text-foreground">
+                          {sh.nama}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {sh.jabatan}
+                        </p>
                       </div>
                     </div>
                     <div className="space-y-1 text-xs">
@@ -332,8 +362,12 @@ export function InteractiveMap() {
                       style={{ color: urgensiColors[ins.urgensi] }}
                     />
                     <div>
-                      <p className="font-semibold text-foreground">{ins.judul}</p>
-                      <p className="text-xs text-muted-foreground">{ins.lokasi}</p>
+                      <p className="font-semibold text-foreground">
+                        {ins.judul}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {ins.lokasi}
+                      </p>
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground mb-2">
@@ -372,7 +406,10 @@ export function InteractiveMap() {
         onToggleIncidents={() => setShowIncidents(!showIncidents)}
       />
 
-      <MapLegend showStakeholders={showStakeholders} showIncidents={showIncidents} />
+      <MapLegend
+        showStakeholders={showStakeholders}
+        showIncidents={showIncidents}
+      />
     </div>
   );
 }

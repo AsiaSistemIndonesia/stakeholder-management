@@ -30,7 +30,7 @@ export function StakeholderByZonaChart() {
     ([name, value]) => ({
       name: name.replace("Zona ", ""),
       value,
-    })
+    }),
   );
 
   return (
@@ -43,7 +43,10 @@ export function StakeholderByZonaChart() {
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+            <BarChart
+              data={data}
+              margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis dataKey="name" stroke="#9ca3af" fontSize={12} />
               <YAxis stroke="#9ca3af" fontSize={12} />
@@ -69,7 +72,7 @@ export function StakeholderByKategoriChart() {
     ([name, value]) => ({
       name: name.charAt(0).toUpperCase() + name.slice(1),
       value,
-    })
+    }),
   );
 
   return (
@@ -119,9 +122,13 @@ export function StakeholderByKategoriChart() {
             <div key={entry.name} className="flex items-center gap-2">
               <div
                 className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: Object.values(kategoriColors)[index] }}
+                style={{
+                  backgroundColor: Object.values(kategoriColors)[index],
+                }}
               />
-              <span className="text-xs text-muted-foreground">{entry.name}</span>
+              <span className="text-xs text-muted-foreground">
+                {entry.name}
+              </span>
             </div>
           ))}
         </div>
@@ -135,7 +142,7 @@ export function TrenBulananChart() {
     <Card className="bg-card border-border">
       <CardHeader>
         <CardTitle className="text-base font-medium text-card-foreground">
-          Tren Bulanan
+          Tren Insiden Bulanan
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -157,14 +164,7 @@ export function TrenBulananChart() {
                 }}
               />
               <Legend />
-              <Line
-                type="monotone"
-                dataKey="stakeholder"
-                stroke="#3b82f6"
-                strokeWidth={2}
-                dot={{ fill: "#3b82f6", strokeWidth: 2 }}
-                name="Stakeholder"
-              />
+
               <Line
                 type="monotone"
                 dataKey="insiden"
@@ -183,11 +183,23 @@ export function TrenBulananChart() {
 
 export function RadarKategoriChart() {
   const data = [
-    { subject: "Customer", A: dashboardStats.stakeholderByKategori.customer * 20 },
-    { subject: "Pemerintah", A: dashboardStats.stakeholderByKategori.pemerintah * 20 },
-    { subject: "Komunitas", A: dashboardStats.stakeholderByKategori.komunitas * 20 },
+    {
+      subject: "Customer",
+      A: dashboardStats.stakeholderByKategori.customer * 20,
+    },
+    {
+      subject: "Pemerintah",
+      A: dashboardStats.stakeholderByKategori.pemerintah * 20,
+    },
+    {
+      subject: "Komunitas",
+      A: dashboardStats.stakeholderByKategori.komunitas * 20,
+    },
     { subject: "Mitra", A: dashboardStats.stakeholderByKategori.mitra * 20 },
-    { subject: "Internal", A: dashboardStats.stakeholderByKategori.internal * 10 },
+    {
+      subject: "Internal",
+      A: dashboardStats.stakeholderByKategori.internal * 10,
+    },
   ];
 
   return (
@@ -202,7 +214,11 @@ export function RadarKategoriChart() {
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
               <PolarGrid stroke="#374151" />
-              <PolarAngleAxis dataKey="subject" stroke="#9ca3af" fontSize={12} />
+              <PolarAngleAxis
+                dataKey="subject"
+                stroke="#9ca3af"
+                fontSize={12}
+              />
               <PolarRadiusAxis stroke="#9ca3af" fontSize={10} />
               <Radar
                 name="Stakeholder"
