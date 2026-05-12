@@ -1,89 +1,133 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
+/* ─── Light Theme (default) ─── */
 :root {
-  /* Pertamina Dark Theme - Professional Enterprise */
-  --background: oklch(0.13 0.005 240);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.17 0.008 240);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.17 0.008 240);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.65 0.2 25);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.22 0.01 240);
-  --secondary-foreground: oklch(0.9 0 0);
-  --muted: oklch(0.22 0.01 240);
-  --muted-foreground: oklch(0.65 0.02 240);
-  --accent: oklch(0.55 0.18 250);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.28 0.015 240);
-  --input: oklch(0.22 0.01 240);
-  --ring: oklch(0.65 0.2 25);
-  --chart-1: oklch(0.65 0.2 25);
-  --chart-2: oklch(0.6 0.15 175);
-  --chart-3: oklch(0.7 0.18 85);
-  --chart-4: oklch(0.55 0.18 250);
-  --chart-5: oklch(0.6 0.2 310);
+  /* Pertamina brand palette
+     Red   #ED1A2F  → primary / danger
+     Blue  #006BB8  → accent / info
+     Green #A6C210  → success
+     White #FFFFFF  → background
+     Black #161B22  → foreground
+  */
+  --background: #ffffff;
+  --foreground: #161b22;
+
+  --card: #f5f6f8;
+  --card-foreground: #161b22;
+
+  --popover: #ffffff;
+  --popover-foreground: #161b22;
+
+  --primary: #ed1a2f;
+  --primary-foreground: #ffffff;
+
+  --secondary: #eef2f7;
+  --secondary-foreground: #161b22;
+
+  --muted: #eef2f7;
+  --muted-foreground: #5a6575;
+
+  --accent: #006bb8;
+  --accent-foreground: #ffffff;
+
+  --destructive: #ed1a2f;
+  --destructive-foreground: #ffffff;
+
+  --success: #a6c210;
+  --success-foreground: #161b22;
+
+  --border: #dde3ec;
+  --input: #eef2f7;
+  --ring: #ed1a2f;
+
   --radius: 0.5rem;
-  --sidebar: oklch(0.15 0.008 240);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.65 0.2 25);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.22 0.01 240);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.28 0.015 240);
-  --sidebar-ring: oklch(0.65 0.2 25);
-  
-  /* Status Colors */
-  --success: oklch(0.6 0.15 160);
-  --warning: oklch(0.75 0.18 85);
-  --danger: oklch(0.55 0.22 25);
-  --info: oklch(0.6 0.15 250);
+
+  /* Charts */
+  --chart-1: #ed1a2f;
+  --chart-2: #006bb8;
+  --chart-3: #a6c210;
+  --chart-4: #f59e0b;
+  --chart-5: #8b5cf6;
+
+  /* Sidebar */
+  --sidebar: #161b22;
+  --sidebar-foreground: #f5f6f8;
+  --sidebar-primary: #ed1a2f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #252c38;
+  --sidebar-accent-foreground: #f5f6f8;
+  --sidebar-border: #2d3748;
+  --sidebar-ring: #ed1a2f;
+
+  /* Status */
+  --warning: #f59e0b;
+  --danger: #ed1a2f;
+  --info: #006bb8;
 }
 
+/* ─── Dark Theme ─── */
 .dark {
-  --background: oklch(0.13 0.005 240);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.17 0.008 240);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.17 0.008 240);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.65 0.2 25);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.22 0.01 240);
-  --secondary-foreground: oklch(0.9 0 0);
-  --muted: oklch(0.22 0.01 240);
-  --muted-foreground: oklch(0.65 0.02 240);
-  --accent: oklch(0.55 0.18 250);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.28 0.015 240);
-  --input: oklch(0.22 0.01 240);
-  --ring: oklch(0.65 0.2 25);
-  --chart-1: oklch(0.65 0.2 25);
-  --chart-2: oklch(0.6 0.15 175);
-  --chart-3: oklch(0.7 0.18 85);
-  --chart-4: oklch(0.55 0.18 250);
-  --chart-5: oklch(0.6 0.2 310);
-  --sidebar: oklch(0.15 0.008 240);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.65 0.2 25);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.22 0.01 240);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.28 0.015 240);
-  --sidebar-ring: oklch(0.65 0.2 25);
+  --background: #161b22;
+  --foreground: #f5f6f8;
+
+  --card: #1e2633;
+  --card-foreground: #f5f6f8;
+
+  --popover: #1e2633;
+  --popover-foreground: #f5f6f8;
+
+  --primary: #ed1a2f;
+  --primary-foreground: #ffffff;
+
+  --secondary: #252c38;
+  --secondary-foreground: #f5f6f8;
+
+  --muted: #252c38;
+  --muted-foreground: #8a95a3;
+
+  --accent: #006bb8;
+  --accent-foreground: #ffffff;
+
+  --destructive: #ed1a2f;
+  --destructive-foreground: #ffffff;
+
+  --success: #a6c210;
+  --success-foreground: #161b22;
+
+  --border: #2d3748;
+  --input: #252c38;
+  --ring: #ed1a2f;
+
+  /* Charts */
+  --chart-1: #ed1a2f;
+  --chart-2: #006bb8;
+  --chart-3: #a6c210;
+  --chart-4: #f59e0b;
+  --chart-5: #8b5cf6;
+
+  /* Sidebar — stays dark in both themes */
+  --sidebar: #0d1117;
+  --sidebar-foreground: #f5f6f8;
+  --sidebar-primary: #ed1a2f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e2633;
+  --sidebar-accent-foreground: #f5f6f8;
+  --sidebar-border: #2d3748;
+  --sidebar-ring: #ed1a2f;
+
+  /* Status */
+  --warning: #f59e0b;
+  --danger: #ed1a2f;
+  --info: #006bb8;
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -100,6 +144,8 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -120,7 +166,6 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-info: var(--info);
@@ -135,48 +180,49 @@
   }
 }
 
-/* Leaflet Map Styles */
+/* ─── Leaflet — adapts to both themes ─── */
 .leaflet-container {
-  background: oklch(0.17 0.008 240) !important;
+  background: var(--card) !important;
   font-family: var(--font-sans);
 }
 
 .leaflet-popup-content-wrapper {
-  background: oklch(0.17 0.008 240) !important;
-  color: oklch(0.95 0 0) !important;
+  background: var(--card) !important;
+  color: var(--foreground) !important;
   border-radius: 0.5rem !important;
-  border: 1px solid oklch(0.28 0.015 240) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 .leaflet-popup-tip {
-  background: oklch(0.17 0.008 240) !important;
+  background: var(--card) !important;
 }
 
 .leaflet-control-zoom a {
-  background: oklch(0.17 0.008 240) !important;
-  color: oklch(0.95 0 0) !important;
-  border-color: oklch(0.28 0.015 240) !important;
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
 }
 
 .leaflet-control-zoom a:hover {
-  background: oklch(0.22 0.01 240) !important;
+  background: var(--secondary) !important;
 }
 
-/* Custom Scrollbar */
+/* ─── Custom Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: oklch(0.15 0.008 240);
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.28 0.015 240);
+  background: var(--border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.35 0.015 240);
+  background: var(--muted-foreground);
 }

@@ -2,6 +2,10 @@
 
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
+import {
+  SidebarProvider,
+  useSidebar,
+} from "@/components/layout/sidebar-context";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Loader2 } from "lucide-react";
 
@@ -11,12 +15,13 @@ interface DashboardLayoutProps {
   subtitle?: string;
 }
 
-export function DashboardLayout({
+function DashboardLayoutContent({
   children,
   title,
   subtitle,
 }: DashboardLayoutProps) {
   const { isLoading, user } = useAuth();
+  const { collapsed } = useSidebar();
 
   if (isLoading || !user) {
     return (
@@ -32,10 +37,31 @@ export function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="lg:pl-64 transition-all duration-300">
+      <div
+        className="transition-all duration-300"
+        style={{
+          marginLeft: collapsed ? 64 : 256,
+        }}
+      >
         <Header title={title} subtitle={subtitle} />
         <main className="p-6">{children}</main>
       </div>
     </div>
+  );
+}
+
+export function DashboardLayout({
+  children,
+  title,
+  subtitle,
+}: DashboardLayoutProps) {
+  return (
+    <SidebarProvider>
+      <DashboardLayoutContent
+        children={children}
+        title={title}
+        subtitle={subtitle}
+      />
+    </SidebarProvider>
   );
 }

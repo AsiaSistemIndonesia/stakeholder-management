@@ -4,10 +4,19 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, AlertCircle, Loader2 } from "lucide-react";
 import { login, USERS } from "@/lib/auth";
+import { useAuth } from "@/components/auth/auth-provider";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/components/auth/auth-provider";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+
+const ROLE_STYLES: Record<string, string> = {
+  super_admin: "bg-primary/10 text-primary border border-primary/30",
+  admin: "bg-accent/10 text-accent border border-accent/30",
+  viewer: "bg-success/10 text-success-foreground border border-success/30",
+};
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,7 +34,7 @@ export default function LoginPage() {
       const user = login(email, password);
       if (user) {
         refreshUser();
-        router.push("/");
+        router.replace("/");
       } else {
         setError("Email atau kata sandi tidak valid. Silakan coba lagi.");
       }
@@ -40,7 +49,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex bg-background">
-      {/* Left: Branding Panel */}
+      {/* ── Left: Branding Panel ── */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col">
         {/* Background image */}
         <div
@@ -48,12 +57,12 @@ export default function LoginPage() {
           style={{ backgroundImage: "url('/images/login-bg.jpg')" }}
           aria-hidden="true"
         />
-        {/* Overlay */}
+        {/* Dark overlay using brand black */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, oklch(0.13 0.005 240 / 0.92) 0%, oklch(0.13 0.005 240 / 0.75) 50%, oklch(0.65 0.2 25 / 0.35) 100%)",
+              "linear-gradient(145deg, rgba(22,27,34,0.93) 0%, rgba(22,27,34,0.78) 55%, rgba(237,26,47,0.28) 100%)",
           }}
           aria-hidden="true"
         />
@@ -62,39 +71,37 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col h-full p-10">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
+            {/* <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
               <span className="text-primary-foreground font-bold text-base">
                 PD
               </span>
             </div>
             <div>
-              <p className="text-foreground font-semibold text-base leading-tight">
+              <p className="text-white font-semibold text-base leading-tight">
                 Pertamina Drilling
               </p>
-              <p className="text-muted-foreground text-xs">
-                Services Indonesia
-              </p>
-            </div>
+              <p className="text-white/60 text-xs">Services Indonesia</p>
+            </div> */}
+            <Image
+              src="/images/logo.png"
+              alt="Logo Pertamina Drilling"
+              width={50}
+              height={50}
+              className="mb-6"
+            />
           </div>
 
           {/* Center tagline */}
           <div className="flex-1 flex flex-col justify-center">
             <div className="max-w-sm">
-              <div
-                className="inline-block px-3 py-1 rounded-full text-xs font-medium mb-4"
-                style={{
-                  background: "oklch(0.65 0.2 25 / 0.2)",
-                  color: "oklch(0.85 0.12 25)",
-                  border: "1px solid oklch(0.65 0.2 25 / 0.35)",
-                }}
-              >
+              <div className="inline-block px-3 py-1 rounded-full text-xs font-medium mb-4 bg-primary/20 text-primary border border-primary/40">
                 Stakeholder Management Platform
               </div>
-              <h1 className="text-4xl font-bold text-foreground leading-tight mb-4 text-balance">
+              <h1 className="text-4xl font-bold text-white leading-tight mb-4 text-balance">
                 Kelola Hubungan{" "}
                 <span className="text-primary">Stakeholder</span> Secara Terpadu
               </h1>
-              <p className="text-muted-foreground text-base leading-relaxed">
+              <p className="text-white/65 text-base leading-relaxed">
                 Platform terintegrasi untuk memantau, mengelola, dan
                 menganalisis hubungan dengan seluruh pemangku kepentingan
                 operasi pengeboran.
@@ -110,22 +117,27 @@ export default function LoginPage() {
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                  <span className="text-sm text-muted-foreground">{item}</span>
+                  <span className="text-sm text-white/65">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Footer */}
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-white/40">
             &copy; {new Date().getFullYear()} PT Pertamina Drilling Services
             Indonesia. All rights reserved.
           </p>
         </div>
       </div>
 
-      {/* Right: Login Form */}
-      <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 lg:px-16">
+      {/* ── Right: Login Form ── */}
+      <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 lg:px-16 relative">
+        {/* Theme toggle — top right */}
+        <div className="absolute top-4 right-4">
+          <ThemeToggle />
+        </div>
+
         {/* Mobile logo */}
         <div className="flex items-center gap-3 mb-8 lg:hidden">
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
@@ -154,10 +166,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div className="space-y-2">
-              <Label
-                htmlFor="email"
-                className="text-sm font-medium text-foreground"
-              >
+              <Label htmlFor="email" className="text-sm font-medium">
                 Email
               </Label>
               <div className="relative">
@@ -169,7 +178,7 @@ export default function LoginPage() {
                   placeholder="nama@pertamina-drilling.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 bg-secondary border-border focus:border-primary h-11"
+                  className="pl-10 bg-secondary border-border h-11"
                   required
                 />
               </div>
@@ -177,10 +186,7 @@ export default function LoginPage() {
 
             {/* Password */}
             <div className="space-y-2">
-              <Label
-                htmlFor="password"
-                className="text-sm font-medium text-foreground"
-              >
+              <Label htmlFor="password" className="text-sm font-medium">
                 Kata Sandi
               </Label>
               <div className="relative">
@@ -192,7 +198,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-11 bg-secondary border-border focus:border-primary h-11"
+                  className="pl-10 pr-11 bg-secondary border-border h-11"
                   required
                 />
                 <button
@@ -218,12 +224,7 @@ export default function LoginPage() {
             {error && (
               <div
                 role="alert"
-                className="flex items-start gap-2 rounded-lg px-3 py-3 text-sm"
-                style={{
-                  background: "oklch(0.55 0.22 25 / 0.12)",
-                  border: "1px solid oklch(0.55 0.22 25 / 0.4)",
-                  color: "oklch(0.8 0.12 25)",
-                }}
+                className="flex items-start gap-2 rounded-lg px-3 py-3 text-sm bg-destructive/10 border border-destructive/40 text-destructive"
               >
                 <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
                 <span>{error}</span>
@@ -234,7 +235,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full h-11 font-semibold text-base bg-primary hover:bg-primary/90 text-primary-foreground hover:cursor-pointer"
+              className="w-full h-11 font-semibold text-base"
             >
               {isPending ? (
                 <>
@@ -262,7 +263,7 @@ export default function LoginPage() {
                   key={u.id}
                   type="button"
                   onClick={() => fillDemo(u.email, u.password)}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-secondary hover:bg-secondary/80 border border-border transition-colors group text-left hover:cursor-pointer"
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-secondary hover:bg-secondary/70 border border-border transition-colors text-left"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
@@ -284,26 +285,10 @@ export default function LoginPage() {
                     </div>
                   </div>
                   <span
-                    className="text-xs px-2 py-0.5 rounded-full font-medium"
-                    style={
-                      u.role === "super_admin"
-                        ? {
-                            background: "oklch(0.65 0.2 25 / 0.15)",
-                            color: "oklch(0.85 0.12 25)",
-                            border: "1px solid oklch(0.65 0.2 25 / 0.3)",
-                          }
-                        : u.role === "admin"
-                          ? {
-                              background: "oklch(0.6 0.15 250 / 0.15)",
-                              color: "oklch(0.75 0.12 250)",
-                              border: "1px solid oklch(0.6 0.15 250 / 0.3)",
-                            }
-                          : {
-                              background: "oklch(0.6 0.15 175 / 0.15)",
-                              color: "oklch(0.75 0.12 175)",
-                              border: "1px solid oklch(0.6 0.15 175 / 0.3)",
-                            }
-                    }
+                    className={cn(
+                      "text-xs px-2 py-0.5 rounded-full font-medium",
+                      ROLE_STYLES[u.role] ?? "bg-muted text-muted-foreground",
+                    )}
                   >
                     {u.role.replace("_", " ")}
                   </span>
