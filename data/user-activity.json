@@ -1,0 +1,38 @@
+[
+  {
+    "username": "superadmin",
+    "nama": "Super Admin",
+    "role": "super_admin",
+    "roleLabel": "Super Admin",
+    "lastLogin": "2026-07-22 09:40:12",
+    "lastActivity": "Mengubah Konfigurasi RBAC",
+    "totalLoginCount": 42,
+    "totalActions": 128,
+    "lastUpdatedRecord": "Role: Admin",
+    "isOnline": true
+  },
+  {
+    "username": "admin",
+    "nama": "Administrator",
+    "role": "admin",
+    "roleLabel": "Admin",
+    "lastLogin": "2026-07-22 09:10:22",
+    "lastActivity": "Memperbarui Stakeholder Budi Santoso",
+    "totalLoginCount": 38,
+    "totalActions": 94,
+    "lastUpdatedRecord": "Budi Santoso (sh-1)",
+    "isOnline": true
+  },
+  {
+    "username": "phase1",
+    "nama": "Phase 1 User",
+    "role": "phase1",
+    "roleLabel": "Phase 1 User",
+    "lastLogin": "2026-07-22 08:30:15",
+    "lastActivity": "Membuat Stakeholder Ir. Sugeng Hartono",
+    "totalLoginCount": 27,
+    "totalActions": 56,
+    "lastUpdatedRecord": "Ir. Sugeng Hartono (sh-13)",
+    "isOnline": false
+  }
+]

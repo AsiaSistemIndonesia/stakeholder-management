@@ -1,0 +1,20 @@
+[
+  {
+    "username": "phase1",
+    "password": "phase1",
+    "role": "phase1",
+    "nama": "Phase 1 User"
+  },
+  {
+    "username": "admin",
+    "password": "admin",
+    "role": "admin",
+    "nama": "Administrator"
+  },
+  {
+    "username": "superadmin",
+    "password": "superadmin",
+    "role": "super_admin",
+    "nama": "Super Admin"
+  }
+]

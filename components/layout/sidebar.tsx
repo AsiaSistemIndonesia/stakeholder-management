@@ -15,48 +15,78 @@ import {
   ChevronLeft,
   Menu,
   Heart,
+  ShieldCheck,
+  History,
+  ClipboardList,
+  Activity,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { useSidebar } from "@/components/layout/sidebar-context";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
+import { usePermissions } from "@/hooks/usePermissions";
 
 const menuItems = [
   {
+    id: "dashboard",
     label: "Dashboard",
     href: "/",
     icon: LayoutDashboard,
   },
   {
+    id: "stakeholder",
     label: "Stakeholder",
     href: "/stakeholder",
     icon: Users,
   },
   {
-    label: "Organisasi",
-    href: "/organisasi",
-    icon: Building2,
-  },
-  {
+    id: "peta",
     label: "Peta Interaktif",
     href: "/peta",
     icon: Map,
   },
   {
+    id: "laporan",
     label: "Laporan",
     href: "/laporan",
     icon: AlertTriangle,
   },
   {
+    id: "csr",
     label: "CSR",
     href: "/csr",
     icon: Heart,
   },
   {
+    id: "fungsi",
     label: "Struktur Fungsi",
     href: "/fungsi",
     icon: Network,
+  },
+  {
+    id: "role-management",
+    label: "Role Management",
+    href: "/role-management",
+    icon: ShieldCheck,
+  },
+  {
+    id: "activity-log",
+    label: "Activity Logging",
+    href: "/activity-log",
+    icon: History,
+  },
+  {
+    id: "audit-trail",
+    label: "Audit Trail",
+    href: "/audit-trail",
+    icon: ClipboardList,
+  },
+  {
+    id: "user-monitoring",
+    label: "User Monitoring",
+    href: "/user-monitoring",
+    icon: Activity,
   },
 ];
 
@@ -64,6 +94,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebar();
   const { user, logout } = useAuth();
+  const { hasMenuAccess } = usePermissions();
 
   return (
     <>
@@ -124,7 +155,7 @@ export function Sidebar() {
 
           {/* Navigation */}
           <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-            {menuItems.map((item) => {
+            {menuItems.filter(item => hasMenuAccess(item.id)).map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
@@ -175,7 +206,7 @@ export function Sidebar() {
               {!collapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-sidebar-foreground truncate">
-                    {user?.nama ?? "—"}
+                    {user?.nama || user?.username || "—"}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">
                     {(user?.role ?? "").replace("_", " ").toUpperCase()}

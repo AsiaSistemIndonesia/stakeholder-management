@@ -1,16 +1,28 @@
 // Stakeholder Management Platform - Hardcoded Data for POC
 
+export interface StakeholderDocument {
+  id: string;
+  nama: string;
+  tipe: "pdf" | "docx" | "xlsx" | string;
+  ukuran: string;
+  url?: string;
+  createdAt?: string;
+}
+
 export interface Stakeholder {
   id: string;
   nama: string;
   jabatan: string;
-  organisasiId: string;
+  organisasiIds: string[];
+  organisasiId?: string;
   fungsiId?: string;
   kategori: "customer" | "pemerintah" | "komunitas" | "mitra" | "internal";
   email: string;
   telepon: string;
   alamat: string;
-  foto: string;
+  foto?: string;
+  dokumen?: StakeholderDocument[];
+  status?: "aktif" | "non-aktif";
   zonaOperasi: string;
   alumniPendidikan?: string;
   jurusanPendidikan?: string;
@@ -321,11 +333,17 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Budi Santoso",
     jabatan: "Kepala Dinas",
     organisasiId: "org-2",
+    organisasiIds: ["org-2", "org-5", "org-6"],
     kategori: "pemerintah",
+    status: "aktif",
     email: "budi.santoso@esdm.riau.go.id",
     telepon: "+62811234567",
     alamat: "Jl. Jenderal Sudirman No. 45, Pekanbaru",
     foto: "/avatars/avatar-1.jpg",
+    dokumen: [
+      { id: "doc-1", nama: "Izin_Operasi_Riau_2024.pdf", tipe: "pdf", ukuran: "2.4 MB", url: "#", createdAt: "2024-01-20" },
+      { id: "doc-2", nama: "MoU_Kerjasama_ESDM.docx", tipe: "docx", ukuran: "1.1 MB", url: "#", createdAt: "2024-02-10" }
+    ],
     zonaOperasi: "zona-1",
     alumniPendidikan: "Institut Teknologi Bandung",
     jurusanPendidikan: "Teknik Perminyakan",
@@ -339,11 +357,16 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Siti Rahayu",
     jabatan: "Direktur Operasi",
     organisasiId: "org-3",
+    organisasiIds: ["org-3", "org-1"],
     kategori: "customer",
+    status: "aktif",
     email: "siti.rahayu@medco.com",
     telepon: "+62812345678",
     alamat: "Jl. Ampera Raya No. 20, Jakarta Selatan",
     foto: "/avatars/avatar-2.jpg",
+    dokumen: [
+      { id: "doc-3", nama: "Kontrak_Drilling_Services_Medco.pdf", tipe: "pdf", ukuran: "4.8 MB", url: "#", createdAt: "2024-02-05" }
+    ],
     zonaOperasi: "zona-1",
     alumniPendidikan: "Universitas Indonesia",
     jurusanPendidikan: "Teknik Kimia",
@@ -357,11 +380,14 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Ahmad Hidayat",
     jabatan: "Ketua Komunitas",
     organisasiId: "org-4",
+    organisasiIds: ["org-4"],
     kategori: "komunitas",
+    status: "aktif",
     email: "ahmad.hidayat@gmail.com",
     telepon: "+62813456789",
     alamat: "Desa Balai Makam, Duri, Riau",
     foto: "/avatars/avatar-3.jpg",
+    dokumen: [],
     zonaOperasi: "zona-1",
     catatan: "Perwakilan masyarakat lokal area Duri",
     koordinat: { lat: 1.3, lng: 101.35 },
@@ -373,12 +399,17 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Dr. Wahyu Prakoso",
     jabatan: "Deputi Operasi",
     organisasiId: "org-5",
+    organisasiIds: ["org-5"],
     fungsiId: "fungsi-3",
     kategori: "pemerintah",
+    status: "aktif",
     email: "wahyu.prakoso@skkmigas.go.id",
     telepon: "+62814567890",
     alamat: "Gedung Wisma Mulia Lt. 35, Jakarta",
     foto: "/avatars/avatar-4.jpg",
+    dokumen: [
+      { id: "doc-4", nama: "Surat_Persetujuan_Eksplorasi.pdf", tipe: "pdf", ukuran: "3.2 MB", url: "#", createdAt: "2024-01-18" }
+    ],
     zonaOperasi: "zona-2",
     alumniPendidikan: "Universitas Gadjah Mada",
     jurusanPendidikan: "Teknik Geologi",
@@ -392,11 +423,14 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Michael Chen",
     jabatan: "Country Manager",
     organisasiId: "org-6",
+    organisasiIds: ["org-6"],
     kategori: "mitra",
+    status: "aktif",
     email: "michael.chen@chevron.com",
     telepon: "+62815678901",
     alamat: "Rumbai Complex, Pekanbaru",
     foto: "/avatars/avatar-5.jpg",
+    dokumen: [],
     zonaOperasi: "zona-1",
     alumniPendidikan: "Stanford University",
     jurusanPendidikan: "Petroleum Engineering",
@@ -410,12 +444,15 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Dewi Lestari",
     jabatan: "Corporate Secretary",
     organisasiId: "org-8",
+    organisasiIds: ["org-8", "org-1"],
     fungsiId: "fungsi-1",
     kategori: "internal",
+    status: "aktif",
     email: "dewi.lestari@pertamina-drilling.com",
     telepon: "+62816789012",
     alamat: "Gedung Pertamina, Jakarta",
     foto: "/avatars/avatar-6.jpg",
+    dokumen: [],
     zonaOperasi: "zona-2",
     alumniPendidikan: "Universitas Indonesia",
     jurusanPendidikan: "Ilmu Komunikasi",
@@ -428,12 +465,15 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Eko Prasetyo",
     jabatan: "VP Human Capital",
     organisasiId: "org-9",
+    organisasiIds: ["org-9"],
     fungsiId: "fungsi-2",
     kategori: "internal",
+    status: "aktif",
     email: "eko.prasetyo@pertamina-drilling.com",
     telepon: "+62817890123",
     alamat: "Gedung Pertamina, Jakarta",
     foto: "/avatars/avatar-7.jpg",
+    dokumen: [],
     zonaOperasi: "zona-2",
     alumniPendidikan: "Institut Teknologi Bandung",
     jurusanPendidikan: "Manajemen SDM",
@@ -446,12 +486,15 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Ir. Hendra Wijaya",
     jabatan: "VP Operations",
     organisasiId: "org-10",
+    organisasiIds: ["org-10"],
     fungsiId: "fungsi-3",
     kategori: "internal",
+    status: "aktif",
     email: "hendra.wijaya@pertamina-drilling.com",
     telepon: "+62818901234",
     alamat: "Gedung Pertamina, Jakarta",
     foto: "/avatars/avatar-8.jpg",
+    dokumen: [],
     zonaOperasi: "zona-2",
     alumniPendidikan: "Institut Teknologi Bandung",
     jurusanPendidikan: "Teknik Perminyakan",
@@ -464,11 +507,16 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Rina Kusuma",
     jabatan: "Kepala Seksi Perizinan",
     organisasiId: "org-7",
+    organisasiIds: ["org-7"],
     kategori: "pemerintah",
+    status: "aktif",
     email: "rina.kusuma@esdm.kaltim.go.id",
     telepon: "+62819012345",
     alamat: "Jl. A. Yani No. 1, Samarinda",
     foto: "/avatars/avatar-9.jpg",
+    dokumen: [
+      { id: "doc-5", nama: "Lampiran_AMDAL_Kaltim.xlsx", tipe: "xlsx", ukuran: "1.8 MB", url: "#", createdAt: "2024-02-22" }
+    ],
     zonaOperasi: "zona-3",
     alumniPendidikan: "Universitas Mulawarman",
     jurusanPendidikan: "Teknik Pertambangan",
@@ -481,12 +529,15 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Bambang Sutrisno",
     jabatan: "Field Manager",
     organisasiId: "org-10",
+    organisasiIds: ["org-10"],
     fungsiId: "fungsi-3",
     kategori: "internal",
+    status: "aktif",
     email: "bambang.sutrisno@pertamina-drilling.com",
     telepon: "+62820123456",
     alamat: "Base Camp Duri, Riau",
     foto: "/avatars/avatar-10.jpg",
+    dokumen: [],
     zonaOperasi: "zona-1",
     alumniPendidikan: "Institut Teknologi Sepuluh Nopember",
     jurusanPendidikan: "Teknik Mesin",
@@ -499,12 +550,15 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Ratna Sari",
     jabatan: "Community Relations Officer",
     organisasiId: "org-8",
+    organisasiIds: ["org-8"],
     fungsiId: "fungsi-1",
     kategori: "internal",
+    status: "aktif",
     email: "ratna.sari@pertamina-drilling.com",
     telepon: "+62821234567",
     alamat: "Gedung Pertamina, Jakarta",
     foto: "/avatars/avatar-11.jpg",
+    dokumen: [],
     zonaOperasi: "zona-2",
     alumniPendidikan: "Universitas Padjadjaran",
     jurusanPendidikan: "Hubungan Masyarakat",
@@ -517,12 +571,15 @@ export const stakeholderData: Stakeholder[] = [
     nama: "Agus Firmansyah",
     jabatan: "HR Manager",
     organisasiId: "org-9",
+    organisasiIds: ["org-9"],
     fungsiId: "fungsi-2",
     kategori: "internal",
+    status: "aktif",
     email: "agus.firmansyah@pertamina-drilling.com",
     telepon: "+62822345678",
     alamat: "Gedung Pertamina, Jakarta",
     foto: "/avatars/avatar-12.jpg",
+    dokumen: [],
     zonaOperasi: "zona-2",
     alumniPendidikan: "Universitas Airlangga",
     jurusanPendidikan: "Psikologi",
@@ -948,8 +1005,15 @@ export function getFungsiById(id: string): Fungsi | undefined {
   return fungsiData.find((f) => f.id === id);
 }
 
+export function getOrganisasiListByIds(ids?: string[]): Organisasi[] {
+  if (!ids || ids.length === 0) return [];
+  return organisasiData.filter((o) => ids.includes(o.id));
+}
+
 export function getStakeholdersByOrganisasi(orgId: string): Stakeholder[] {
-  return stakeholderData.filter((s) => s.organisasiId === orgId);
+  return stakeholderData.filter(
+    (s) => (s.organisasiIds && s.organisasiIds.includes(orgId)) || s.organisasiId === orgId
+  );
 }
 
 export function getStakeholdersByZona(zonaId: string): Stakeholder[] {

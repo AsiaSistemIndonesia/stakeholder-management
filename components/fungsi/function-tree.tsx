@@ -32,9 +32,8 @@ export function FunctionTree({ fungsi }: FunctionTreeProps) {
     depth: number
   ) => {
     const stakeholder = getStakeholderById(member.stakeholderId);
-    const org = stakeholder
-      ? getOrganisasiById(stakeholder.organisasiId)
-      : null;
+    const orgId = stakeholder?.organisasiIds?.[0] || stakeholder?.organisasiId;
+    const org = orgId ? getOrganisasiById(orgId) : null;
     const subordinates = getSubordinates(member.stakeholderId);
 
     if (!stakeholder) return null;

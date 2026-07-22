@@ -42,7 +42,8 @@ export function StakeholderDetailModal({
 }: StakeholderDetailModalProps) {
   if (!stakeholder) return null;
 
-  const organisasi = getOrganisasiById(stakeholder.organisasiId);
+  const orgId = stakeholder.organisasiIds?.[0] || stakeholder.organisasiId;
+  const organisasi = orgId ? getOrganisasiById(orgId) : undefined;
   const zona = getZonaById(stakeholder.zonaOperasi);
   const fungsi = stakeholder.fungsiId
     ? getFungsiById(stakeholder.fungsiId)
@@ -50,7 +51,7 @@ export function StakeholderDetailModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] overflow-y-auto overflow-x-hidden w-full">
         <DialogHeader>
           <DialogTitle className="sr-only">Detail Stakeholder</DialogTitle>
         </DialogHeader>

@@ -22,7 +22,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { refreshUser } = useAuth();
   const [isPending, startTransition] = useTransition();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +31,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
     startTransition(() => {
-      const user = login(email, password);
+      const user = login(username, password);
       if (user) {
         refreshUser();
         router.replace("/");
@@ -41,8 +41,8 @@ export default function LoginPage() {
     });
   }
 
-  function fillDemo(demoEmail: string, demoPassword: string) {
-    setEmail(demoEmail);
+  function fillDemo(demoUsername: string, demoPassword: string) {
+    setUsername(demoUsername);
     setPassword(demoPassword);
     setError(null);
   }
@@ -166,18 +166,18 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email
+              <Label htmlFor="username" className="text-sm font-medium">
+                Username
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="nama@pertamina-drilling.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  type="text"
+                  autoComplete="username"
+                  placeholder="phase1"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="pl-10 bg-secondary border-border h-11"
                   required
                 />
@@ -260,27 +260,25 @@ export default function LoginPage() {
             <div className="space-y-2">
               {USERS.map((u) => (
                 <button
-                  key={u.id}
+                  key={u.username}
                   type="button"
-                  onClick={() => fillDemo(u.email, u.password)}
+                  onClick={() => fillDemo(u.username, u.password)}
                   className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-secondary hover:bg-secondary/70 border border-border transition-colors text-left"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
                       <span className="text-xs font-semibold text-muted-foreground">
-                        {u.nama
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .slice(0, 2)}
+                        {u.username
+                          .substring(0, 2)
+                          .toUpperCase()}
                       </span>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-foreground leading-tight">
-                        {u.nama}
+                        {u.username}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {u.jabatan}
+                        {u.role}
                       </p>
                     </div>
                   </div>

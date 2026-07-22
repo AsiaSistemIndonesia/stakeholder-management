@@ -373,7 +373,8 @@ export function InteractiveMap() {
         {/* Stakeholder Markers */}
         {showStakeholders &&
           filteredStakeholders.map((sh) => {
-            const org = getOrganisasiById(sh.organisasiId);
+            const orgId = sh.organisasiIds?.[0] || sh.organisasiId;
+            const org = orgId ? getOrganisasiById(orgId) : undefined;
             return (
               <Marker
                 key={sh.id}

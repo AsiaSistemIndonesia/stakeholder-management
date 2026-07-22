@@ -1,0 +1,105 @@
+{
+  "super_admin": {
+    "id": "super_admin",
+    "name": "Super Admin",
+    "description": "Akses penuh ke seluruh aplikasi termasuk manajemen peran, konfigurasi RBAC, log aktivitas, dan audit trail.",
+    "visibleMenus": [
+      "dashboard",
+      "stakeholder",
+      "organisasi",
+      "peta",
+      "laporan",
+      "csr",
+      "fungsi",
+      "role-management",
+      "activity-log",
+      "audit-trail",
+      "user-monitoring",
+      "settings"
+    ],
+    "dashboardWidgets": [
+      "stats",
+      "orgBreakdown",
+      "zoneBreakdown",
+      "monthlyTrend"
+    ],
+    "permissions": {
+      "stakeholder": { "read": true, "create": true, "update": true, "delete": true },
+      "organisasi": { "read": true, "create": true, "update": true, "delete": true },
+      "peta": { "read": true, "create": true, "update": true, "delete": true },
+      "laporan": { "read": true, "create": true, "update": true, "delete": true },
+      "csr": { "read": true, "create": true, "update": true, "delete": true },
+      "fungsi": { "read": true, "create": true, "update": true, "delete": true },
+      "role_management": { "read": true, "create": true, "update": true, "delete": true },
+      "activity_log": { "read": true, "create": true, "update": true, "delete": true },
+      "audit_trail": { "read": true, "create": true, "update": true, "delete": true },
+      "user_monitoring": { "read": true, "create": true, "update": true, "delete": true }
+    }
+  },
+  "admin": {
+    "id": "admin",
+    "name": "Admin",
+    "description": "Akses ke seluruh fitur dan operasi CRUD aplikasi, namun tidak dapat mengubah konfigurasi RBAC atau audit log.",
+    "visibleMenus": [
+      "dashboard",
+      "stakeholder",
+      "organisasi",
+      "peta",
+      "laporan",
+      "csr",
+      "fungsi",
+      "settings"
+    ],
+    "dashboardWidgets": [
+      "stats",
+      "orgBreakdown",
+      "zoneBreakdown",
+      "monthlyTrend"
+    ],
+    "permissions": {
+      "stakeholder": { "read": true, "create": true, "update": true, "delete": true },
+      "organisasi": { "read": true, "create": true, "update": true, "delete": true },
+      "peta": { "read": true, "create": true, "update": true, "delete": true },
+      "laporan": { "read": true, "create": true, "update": true, "delete": true },
+      "csr": { "read": true, "create": true, "update": true, "delete": true },
+      "fungsi": { "read": true, "create": true, "update": true, "delete": true },
+      "role_management": { "read": false, "create": false, "update": false, "delete": false },
+      "activity_log": { "read": false, "create": false, "update": false, "delete": false },
+      "audit_trail": { "read": false, "create": false, "update": false, "delete": false },
+      "user_monitoring": { "read": false, "create": false, "update": false, "delete": false }
+    }
+  },
+  "phase1": {
+    "id": "phase1",
+    "name": "Phase 1 User",
+    "description": "Pengguna standar Phase 1 dengan akses menu terkonfigurasi.",
+    "visibleMenus": [
+      "dashboard",
+      "stakeholder",
+      "organisasi",
+      "peta",
+      "laporan",
+      "csr",
+      "fungsi",
+      "settings"
+    ],
+    "dashboardWidgets": [
+      "stats",
+      "orgBreakdown",
+      "zoneBreakdown",
+      "monthlyTrend"
+    ],
+    "permissions": {
+      "stakeholder": { "read": true, "create": true, "update": true, "delete": true },
+      "organisasi": { "read": true, "create": true, "update": true, "delete": true },
+      "peta": { "read": true, "create": false, "update": false, "delete": false },
+      "laporan": { "read": true, "create": true, "update": true, "delete": false },
+      "csr": { "read": true, "create": true, "update": true, "delete": false },
+      "fungsi": { "read": true, "create": false, "update": false, "delete": false },
+      "role_management": { "read": false, "create": false, "update": false, "delete": false },
+      "activity_log": { "read": false, "create": false, "update": false, "delete": false },
+      "audit_trail": { "read": false, "create": false, "update": false, "delete": false },
+      "user_monitoring": { "read": false, "create": false, "update": false, "delete": false }
+    }
+  }
+}

@@ -3,6 +3,8 @@ import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/components/auth/auth-provider";
+import { RbacProvider } from "@/lib/rbac-context";
+import { StakeholderProvider } from "@/lib/stakeholder-context";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -43,7 +45,11 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <RbacProvider>
+              <StakeholderProvider>{children}</StakeholderProvider>
+            </RbacProvider>
+          </AuthProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>

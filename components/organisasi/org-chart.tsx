@@ -12,6 +12,8 @@ import { Building2, Users, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+import { useStakeholderContext } from "@/lib/stakeholder-context";
+
 const tipeColors: Record<Organisasi["tipe"], string> = {
   pemerintah: "#EF4444",
   swasta: "#3B82F6",
@@ -27,9 +29,12 @@ interface OrgNodeProps {
 }
 
 function OrgNode({ org, level, isLast }: OrgNodeProps) {
+  const { organisasiList, stakeholders } = useStakeholderContext();
   const [expanded, setExpanded] = useState(true);
-  const children = getChildOrganisasi(org.id);
-  const stakeholders = getStakeholdersByOrganisasi(org.id);
+  const children = organisasiList.filter((o) => o.parentId === org.id);
+  const assignedStakeholders = stakeholders.filter(
+    (s) => (s.organisasiIds && s.organisasiIds.includes(org.id)) || s.organisasiId === org.id
+  );
   const hasChildren = children.length > 0;
 
   return (
@@ -84,7 +89,7 @@ function OrgNode({ org, level, isLast }: OrgNodeProps) {
             </Badge>
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
               <Users className="h-3 w-3" />
-              {stakeholders.length}
+              {assignedStakeholders.length}
             </span>
           </div>
         </div>
@@ -117,8 +122,9 @@ function OrgNode({ org, level, isLast }: OrgNodeProps) {
 }
 
 export function OrgChart() {
+  const { organisasiList } = useStakeholderContext();
   // Get root organizations (no parent)
-  const rootOrgs = organisasiData.filter((org) => !org.parentId);
+  const rootOrgs = organisasiList.filter((org) => !org.parentId);
 
   return (
     <Card className="bg-card border-border">

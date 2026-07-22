@@ -13,7 +13,6 @@ import { currentUser, auditLogData, getStakeholderById } from "@/lib/data";
 import {
   User,
   Shield,
-  Bell,
   History,
   Key,
   Save,
@@ -130,53 +129,6 @@ export default function SettingsPage() {
                 <Key className="h-4 w-4 mr-2" />
                 Ubah Password
               </Button>
-            </CardContent>
-          </Card>
-
-          {/* Notification Settings */}
-          <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-base font-medium text-card-foreground flex items-center gap-2">
-                <Bell className="h-5 w-5 text-primary" />
-                Notifikasi
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-foreground">
-                    Notifikasi Insiden Baru
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Terima notifikasi saat ada laporan insiden baru
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator className="bg-border" />
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-foreground">
-                    Notifikasi Stakeholder Baru
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Terima notifikasi saat ada stakeholder baru ditambahkan
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator className="bg-border" />
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-foreground">
-                    Email Ringkasan Mingguan
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Terima email ringkasan aktivitas setiap minggu
-                  </p>
-                </div>
-                <Switch />
-              </div>
             </CardContent>
           </Card>
         </div>

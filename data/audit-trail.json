@@ -1,0 +1,127 @@
+[
+  {
+    "id": "aud-1",
+    "timestamp": "2026-07-22 09:25:40",
+    "module": "Organization",
+    "entityName": "Dinas ESDM Provinsi Riau",
+    "recordId": "org-2",
+    "username": "admin",
+    "userNama": "Administrator",
+    "role": "admin",
+    "action": "Update",
+    "summary": "Memperbarui Alamat Kantor dan Zona Operasi",
+    "changes": [
+      {
+        "fieldName": "Alamat Kantor",
+        "oldValue": "Pekanbaru, Riau",
+        "newValue": "Jl. Jenderal Sudirman No. 45, Pekanbaru"
+      },
+      {
+        "fieldName": "Deskripsi",
+        "oldValue": "Dinas Energi dan Sumber Daya Mineral",
+        "newValue": "Dinas Energi dan Sumber Daya Mineral Provinsi Riau (Koor Wilayah I)"
+      }
+    ],
+    "history": [
+      {
+        "id": "h-1",
+        "timestamp": "2024-01-15 08:00",
+        "username": "system",
+        "action": "Created",
+        "description": "Organisasi didaftarkan ke sistem"
+      },
+      {
+        "id": "h-2",
+        "timestamp": "2026-07-22 09:25:40",
+        "username": "admin",
+        "action": "Updated",
+        "description": "Memperbarui Alamat Kantor dan Deskripsi"
+      }
+    ]
+  },
+  {
+    "id": "aud-2",
+    "timestamp": "2026-07-22 10:30:18",
+    "module": "Stakeholder",
+    "entityName": "Budi Santoso",
+    "recordId": "sh-1",
+    "username": "admin",
+    "userNama": "Administrator",
+    "role": "admin",
+    "action": "Update",
+    "summary": "Memperbarui Telepon, Organisasi Terkait, dan Dokumen Terlampir",
+    "changes": [
+      {
+        "fieldName": "Nomor Telepon",
+        "oldValue": "+62811234500",
+        "newValue": "+62811234567"
+      },
+      {
+        "fieldName": "Organisasi Terkait",
+        "oldValue": "Dinas ESDM Provinsi Riau",
+        "newValue": "Dinas ESDM Provinsi Riau, SKK Migas, PT Chevron Pacific Indonesia"
+      },
+      {
+        "fieldName": "Dokumen Terlampir",
+        "oldValue": "Izin_Operasi_Riau_2024.pdf",
+        "newValue": "Izin_Operasi_Riau_2024.pdf, MoU_Kerjasama_ESDM.docx"
+      }
+    ],
+    "history": [
+      {
+        "id": "h-10",
+        "timestamp": "2024-01-15 09:00",
+        "username": "system",
+        "action": "Created",
+        "description": "Stakeholder Budi Santoso dibuat"
+      },
+      {
+        "id": "h-11",
+        "timestamp": "2024-02-10 11:30",
+        "username": "phase1",
+        "action": "Updated",
+        "description": "Menambahkan catatan perizinan wilayah Riau"
+      },
+      {
+        "id": "h-12",
+        "timestamp": "2026-07-22 10:30:18",
+        "username": "admin",
+        "action": "Updated",
+        "description": "Memperbarui Nomor Telepon, Organisasi, dan Dokumen Terlampir"
+      }
+    ]
+  },
+  {
+    "id": "aud-3",
+    "timestamp": "2026-07-22 10:05:30",
+    "module": "Role Management",
+    "entityName": "Konfigurasi Peran: Admin",
+    "recordId": "role-admin",
+    "username": "superadmin",
+    "userNama": "Super Admin",
+    "role": "super_admin",
+    "action": "RBAC Update",
+    "summary": "Memperbarui Visibilitas Menu dan Izin CRUD Modul",
+    "changes": [
+      {
+        "fieldName": "Visible Menus",
+        "oldValue": "dashboard, stakeholder, organisasi, peta",
+        "newValue": "dashboard, stakeholder, organisasi, peta, laporan, csr, fungsi, settings"
+      },
+      {
+        "fieldName": "Stakeholder CRUD Permissions",
+        "oldValue": "read: true, create: true, update: false, delete: false",
+        "newValue": "read: true, create: true, update: true, delete: true"
+      }
+    ],
+    "history": [
+      {
+        "id": "h-20",
+        "timestamp": "2026-07-22 10:05:30",
+        "username": "superadmin",
+        "action": "RBAC Updated",
+        "description": "Super Admin mengubah izin akses peran Admin"
+      }
+    ]
+  }
+]

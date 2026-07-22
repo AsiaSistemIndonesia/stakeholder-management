@@ -2,18 +2,20 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Organisasi,
   getZonaById,
   getStakeholdersByOrganisasi,
   getChildOrganisasi,
 } from "@/lib/data";
-import { Building2, Users, MapPin, ChevronRight, Network } from "lucide-react";
+import { Building2, Users, MapPin, Network } from "lucide-react";
+import { ActionMenu } from "@/components/shared/action-menu";
 
 interface OrgCardProps {
   organisasi: Organisasi;
   onClick?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 const tipeColors: Record<Organisasi["tipe"], string> = {
@@ -24,21 +26,18 @@ const tipeColors: Record<Organisasi["tipe"], string> = {
   internal: "#8B5CF6",
 };
 
-export function OrgCard({ organisasi, onClick }: OrgCardProps) {
+export function OrgCard({ organisasi, onClick, onEdit, onDelete }: OrgCardProps) {
   const zona = getZonaById(organisasi.zonaOperasi);
   const stakeholders = getStakeholdersByOrganisasi(organisasi.id);
   const childOrgs = getChildOrganisasi(organisasi.id);
 
   return (
-    <Card
-      className="bg-card border-border hover:border-primary/50 transition-all cursor-pointer group"
-      onClick={onClick}
-    >
+    <Card className="bg-card border-border hover:border-primary/50 transition-all group relative">
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4 flex-1 min-w-0" onClick={onClick}>
             <div
-              className="p-3 rounded-lg"
+              className="p-3 rounded-lg shrink-0 cursor-pointer"
               style={{ backgroundColor: `${tipeColors[organisasi.tipe]}20` }}
             >
               <Building2
@@ -46,7 +45,7 @@ export function OrgCard({ organisasi, onClick }: OrgCardProps) {
                 style={{ color: tipeColors[organisasi.tipe] }}
               />
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 cursor-pointer">
               <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                 {organisasi.nama}
               </h3>
@@ -61,6 +60,7 @@ export function OrgCard({ organisasi, onClick }: OrgCardProps) {
                     borderColor: tipeColors[organisasi.tipe],
                     color: tipeColors[organisasi.tipe],
                   }}
+                  className="capitalize"
                 >
                   {organisasi.tipe}
                 </Badge>
@@ -85,13 +85,15 @@ export function OrgCard({ organisasi, onClick }: OrgCardProps) {
             </div>
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
+          {(onEdit || onDelete || onClick) && (
+            <div className="shrink-0 ml-2" onClick={(e) => e.stopPropagation()}>
+              <ActionMenu
+                onView={onClick ? () => onClick() : undefined}
+                onEdit={onEdit ? () => onEdit() : undefined}
+                onDelete={onDelete ? () => onDelete() : undefined}
+              />
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

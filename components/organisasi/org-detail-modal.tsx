@@ -50,7 +50,7 @@ export function OrgDetailModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl bg-card border-border max-h-[90vh] overflow-y-auto overflow-x-hidden w-full">
         <DialogHeader>
           <DialogTitle className="sr-only">Detail Organisasi</DialogTitle>
         </DialogHeader>
